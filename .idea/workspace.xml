@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="89a2fec1-769e-49ce-9c73-987646858bc6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Main.html" afterPath="$PROJECT_DIR$/Main.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Main_dc.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="UI1.1_JQuery_MobileApp.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="89a2fec1-769e-49ce-9c73-987646858bc6" time="1365264196198" ignored="false" />
+    <file path="/Dummy.txt" changelist="89a2fec1-769e-49ce-9c73-987646858bc6" time="1365264320081" ignored="false" />
     <file path="/Main.html" changelist="89a2fec1-769e-49ce-9c73-987646858bc6" time="1365262235013" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -67,10 +67,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Main.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Main.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Main.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="54" selection-start="912" selection-end="912" vertical-scroll-proportion="0.48872182">
+            <state line="35" column="41" selection-start="1287" selection-end="1287" vertical-scroll-proportion="-19.038462">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main_dc.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Main_dc.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="18" column="21" selection-start="624" selection-end="624" vertical-scroll-proportion="0.46015036">
               <folding />
             </state>
           </provider>
@@ -96,6 +105,7 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/Main.html" />
+        <option value="$PROJECT_DIR$/Main_dc.html" />
       </list>
     </option>
   </component>
@@ -147,20 +157,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="UI1.1_JQuery_MobileApp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="UI1.1_JQuery_MobileApp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="UI1.1_JQuery_MobileApp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value=".idea" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -314,7 +310,11 @@
       <created>1365264200807</created>
       <updated>1365264200807</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="tweeks... switch to our key">
+      <created>1365264325589</created>
+      <updated>1365264325589</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -385,7 +385,7 @@
     <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="main.html from class example &#10;third round" />
+    <option name="LAST_COMMIT_MESSAGE" value="tweeks... switch to our key" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -401,6 +401,7 @@
     <MESSAGE value="main.html from class example" />
     <MESSAGE value="main.html from class example &#10;second round" />
     <MESSAGE value="main.html from class example &#10;third round" />
+    <MESSAGE value="tweeks... switch to our key" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -415,7 +416,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Main.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="54" selection-start="912" selection-end="912" vertical-scroll-proportion="0.48872182">
+        <state line="35" column="41" selection-start="1287" selection-end="1287" vertical-scroll-proportion="-19.038462">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main_dc.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="21" selection-start="624" selection-end="624" vertical-scroll-proportion="0.46015036">
           <folding />
         </state>
       </provider>
