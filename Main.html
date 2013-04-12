@@ -7,9 +7,21 @@
     <script>
         var _apiKey = 'ui1_1'
         var _contacts = null
+        var _currentContactID = null
+
         //gets the contacts
         function getContacts(cb) {
             $.get(
+                    'http://contacts.tinyapollo.com/contacts?key=' + _apiKey,
+                    function(data) {
+                        _contacts = data.contacts
+                        cb()
+                    }
+            )
+        }
+        //put ("Save") the contacts
+        function UpdateContact(cb) {
+            $.put(
                     'http://contacts.tinyapollo.com/contacts?key=' + _apiKey,
                     function(data) {
                         _contacts = data.contacts
@@ -24,11 +36,74 @@
             getContacts(function() {
                         for (var i in _contacts){
                             var contact = _contacts[i]
-                            contactList.append('<li><a href="#">' + contact.name + "</a></li>")
+                            contactList.append('<li><a href="#" data-contact-id="' + i + '">' + contact.name + '</a></li>')
                         }
                         contactList.listview("refresh")
                     } )
         })
+
+        $(document).on("click", "#contact-list a", function() {
+            _currentContactID = $(this).data('contact-id')
+            $.mobile.changePage( "#details", {
+                transition: "slide",
+                reverse: false,
+                changeHash: false
+            });
+        })
+
+        $(document).on("click", "#contact-details button", function() {
+            $.mobile.changePage( "#edit", {
+                transition: "slide",
+                reverse: false,
+                changeHash: false
+            });
+        })
+
+        $(document).on("click", "#cancelbutton", function() {
+            $.mobile.changePage( "#details", {
+                transition: "slide",
+                reverse: true,
+                changeHash: false
+            });
+        })
+
+        $(document).on("click", "#savebutton", function() {
+            _contacts[_currentContactID].title = $("#contactedit-title").val()
+            _contacts[_currentContactID].name = $("#contactedit-name").val()
+            _contacts[_currentContactID].email = $("#contactedit-email").val()
+            _contacts[_currentContactID].phone = $("#contactedit-phone").val()
+            _contacts[_currentContactID].twitterId = $("#contactedit-twitter").val()
+
+
+
+//            $.mobile.changePage( "#details", {
+//                transition: "slide",
+//                reverse: true,
+//                changeHash: false
+//            });
+        })
+
+        $(document).on("pagebeforeshow", "#details", function() {
+            var details = $("#contact-details")
+            //details.html("")
+            //details.append('')
+
+            $("#contact-title").text(_contacts[_currentContactID].title)
+            $("#contact-name").text(_contacts[_currentContactID].name)
+            $("#contact-email").text(_contacts[_currentContactID].email)
+            $("#contact-phone").text(_contacts[_currentContactID].phone)
+            $("#contact-twitter").text(_contacts[_currentContactID].twitterId)
+        })
+
+        $(document).on("pagebeforeshow", "#edit", function() {
+            var details = $("#contact-edit")
+            $("#contactedit-title").val(_contacts[_currentContactID].title)
+            $("#contactedit-name").val(_contacts[_currentContactID].name)
+            $("#contactedit-email").val(_contacts[_currentContactID].email)
+            $("#contactedit-phone").val(_contacts[_currentContactID].phone)
+            $("#contactedit-twitter").val(_contacts[_currentContactID].twitterId)
+        })
+
     </script>
     <script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
 </head>
@@ -45,5 +120,54 @@
         </div>
     </div>
 
+    <div data-role="page" id="details">
+        <div data-role="header" data-position="fixed">
+            <h1>Details</h1>
+        </div>
+        <div data-role="content">
+            <div id="contact-details">
+                <label>Title: </label>
+                <label id="contact-title">
+                    test
+                </label><br>
+                <label><strong>Name: </strong></label>
+                <label id="contact-name">test</label><br>
+                <label>Email: </label>
+                <label id="contact-email">test</label><br>
+                <label>Phone: </label>
+                <label id="contact-phone"></label><br>
+                <label>Twitter ID: </label>
+                <label id="contact-twitter"></label><br>
+                <button name="edit">Edit Contact</button>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="page" id="edit">
+        <div data-role="header" data-position="fixed">
+            <h1>Details</h1>
+        </div>
+        <div data-role="content">
+            <div id="contact-edit">
+                <label>Title: </label>
+                <input id="contactedit-title"/><br>
+
+                <label><strong>Name: </strong></label>
+                <input id="contactedit-name"/><br>
+
+                <label>Email: </label>
+                <input id="contactedit-email"/><br>
+
+                <label>Phone: </label>
+                <input id="contactedit-phone"/><br>
+
+                <label>Twitter ID: </label>
+                <input id="contactedit-twitter"/><br>
+
+                <button name="cancel" id="cancelbutton" data-inline="true">Cancel Changes</button>
+                <button name="save" id="savebutton" data-inline="true" float="right">Save Contact</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
