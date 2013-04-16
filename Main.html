@@ -20,14 +20,45 @@
             )
         }
         //put ("Save") the contacts
-        function UpdateContact(cb) {
-            $.put(
-                    'http://contacts.tinyapollo.com/contacts?key=' + _apiKey,
-                    function(data) {
-                        _contacts = data.contacts
-                        cb()
+        function UpdateContact() {
+            //$("#contactedit-title").val(_contacts[_currentContactID].param())
+            $.ajax({
+                    url: 'http://contacts.tinyapollo.com/contacts/' + _contacts[_currentContactID]._id + '?key=' + _apiKey,
+                    type: 'PUT',
+                    data:   "&name=" + _contacts[_currentContactID].name +
+                            "&title=" + _contacts[_currentContactID].title +
+                            "&email=" + _contacts[_currentContactID].email +
+                            "&phone=" + _contacts[_currentContactID].phone +
+                            "&twitterId=" + _contacts[_currentContactID].twitterId,
+                    success: function(data) {
+                        $.mobile.changePage( "#details", {
+                        transition: "slide",
+                        reverse: true,
+                        changeHash: false
+                        })
                     }
-            )
+            })
+        }
+
+        //post ("Save") new contacts
+        function CreateContact(title, name, email, phone, twitter) {
+            //$("#contactedit-title").val(_contacts[_currentContactID].param())
+            $.ajax({
+                url: 'http://contacts.tinyapollo.com/contacts?key=' + _apiKey,
+                type: 'POST',
+                data:   "&name=" + name +
+                        "&title=" + title +
+                        "&email=" + email +
+                        "&phone=" + phone +
+                        "&twitterId=" + twitter,
+                success: function(data) {
+                    $.mobile.changePage( "#home-screen", {
+                    transition: "slide",
+                    reverse: true,
+                    changeHash: false
+                    })
+                }
+            })
         }
 
         $(document).on("pagebeforeshow", "#home-page", function() {
@@ -51,7 +82,8 @@
             });
         })
 
-        $(document).on("click", "#contact-details button", function() {
+        $(document).on("click", "#addbutton", function() {
+            _currentContactID = null
             $.mobile.changePage( "#edit", {
                 transition: "slide",
                 reverse: false,
@@ -59,21 +91,53 @@
             });
         })
 
-        $(document).on("click", "#cancelbutton", function() {
-            $.mobile.changePage( "#details", {
+        $(document).on("click", "#contact-details #editbutton", function() {
+            $.mobile.changePage( "#edit", {
+                transition: "slide",
+                reverse: false,
+                changeHash: false
+            });
+        })
+
+        $(document).on("click", "#contact-details #backbutton", function() {
+            $.mobile.changePage( "#home-page", {
                 transition: "slide",
                 reverse: true,
                 changeHash: false
             });
         })
 
-        $(document).on("click", "#savebutton", function() {
-            _contacts[_currentContactID].title = $("#contactedit-title").val()
-            _contacts[_currentContactID].name = $("#contactedit-name").val()
-            _contacts[_currentContactID].email = $("#contactedit-email").val()
-            _contacts[_currentContactID].phone = $("#contactedit-phone").val()
-            _contacts[_currentContactID].twitterId = $("#contactedit-twitter").val()
+        $(document).on("click", "#cancelbutton", function() {
+            if (_currentContactID != null) {
+                $.mobile.changePage( "#details", {
+                    transition: "slide",
+                    reverse: true,
+                    changeHash: false
+                });
+            } else {
+                $.mobile.changePage( "#home-page", {
+                    transition: "slide",
+                    reverse: true,
+                    changeHash: false
+                });
+            }
+        })
 
+        $(document).on("click", "#savebutton", function() {
+            if (_currentContactID != null) {
+                _contacts[_currentContactID].title = $("#contactedit-title").val()
+                _contacts[_currentContactID].name = $("#contactedit-name").val()
+                _contacts[_currentContactID].email = $("#contactedit-email").val()
+                _contacts[_currentContactID].phone = $("#contactedit-phone").val()
+                _contacts[_currentContactID].twitterId = $("#contactedit-twitter").val()
+                UpdateContact()
+            } else {
+                CreateContact($("#contactedit-title").val(),
+                              $("#contactedit-name").val(),
+                              $("#contactedit-email").val(),
+                              $("#contactedit-phone").val(),
+                              $("#contactedit-twitter").val())
+            }
 
 
 //            $.mobile.changePage( "#details", {
@@ -96,12 +160,19 @@
         })
 
         $(document).on("pagebeforeshow", "#edit", function() {
-            var details = $("#contact-edit")
-            $("#contactedit-title").val(_contacts[_currentContactID].title)
-            $("#contactedit-name").val(_contacts[_currentContactID].name)
-            $("#contactedit-email").val(_contacts[_currentContactID].email)
-            $("#contactedit-phone").val(_contacts[_currentContactID].phone)
-            $("#contactedit-twitter").val(_contacts[_currentContactID].twitterId)
+            if (_currentContactID != null) {
+                $("#contactedit-title").val(_contacts[_currentContactID].title)
+                $("#contactedit-name").val(_contacts[_currentContactID].name)
+                $("#contactedit-email").val(_contacts[_currentContactID].email)
+                $("#contactedit-phone").val(_contacts[_currentContactID].phone)
+                $("#contactedit-twitter").val(_contacts[_currentContactID].twitterId)
+            } else {
+                $("#contactedit-title").val("")
+                $("#contactedit-name").val("")
+                $("#contactedit-email").val("")
+                $("#contactedit-phone").val("")
+                $("#contactedit-twitter").val("")
+            }
         })
 
     </script>
@@ -116,7 +187,8 @@
             <ul data-role="listview" id="contact-list">
                 <li><a href="#">blank</a></li>
                 <li><a href="#">blank</a></li>
-            </ul>
+            </ul><br>
+            <button name="add" id="addbutton" data-inline="true">Add Contact</button>
         </div>
     </div>
 
@@ -138,14 +210,15 @@
                 <label id="contact-phone"></label><br>
                 <label>Twitter ID: </label>
                 <label id="contact-twitter"></label><br>
-                <button name="edit">Edit Contact</button>
+                <button name="back" id="backbutton" data-inline="true">Back</button>
+                <button name="edit" id="editbutton" data-inline="true">Edit Contact</button>
             </div>
         </div>
     </div>
 
     <div data-role="page" id="edit">
         <div data-role="header" data-position="fixed">
-            <h1>Details</h1>
+            <h1>Edit</h1>
         </div>
         <div data-role="content">
             <div id="contact-edit">
