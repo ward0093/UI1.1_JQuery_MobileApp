@@ -5,6 +5,14 @@
         .strongLabel {font-weight: bold;
                       display: inline-block;
                       width: 100px;}
+        .subLabelLeft {font-size: 8pt;
+                       display: inline-block;
+                       width: 50px;
+                       float: left}
+        .subLabelRight {font-size: 8pt;
+                        display: inline-block;
+                        width: 50px;
+                        float: right}
     </STYLE>
     <title>UI 1.1 MobileWeb Assignment</title>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" />
@@ -28,7 +36,6 @@
         }
         //put ("Save") the contacts
         function UpdateContact() {
-            //$("#contactedit-title").val(_contacts[_currentContactID].param())
             $.ajax({
                     url: 'http://contacts.tinyapollo.com/contacts/' + _contacts[_currentContactID]._id + '?key=' + _apiKey,
                     type: 'PUT',
@@ -49,7 +56,6 @@
 
         //post ("Save") new contacts
         function CreateContact(title, name, email, phone, twitter) {
-            //$("#contactedit-title").val(_contacts[_currentContactID].param())
             $.ajax({
                 url: 'http://contacts.tinyapollo.com/contacts?key=' + _apiKey,
                 type: 'POST',
@@ -69,7 +75,6 @@
         }
 
         function DeleteContact() {
-            //$("#contactedit-title").val(_contacts[_currentContactID].param())
             $.ajax({
                 url: 'http://contacts.tinyapollo.com/contacts/' + _contacts[_currentContactID]._id + '?key=' + _apiKey,
                 type: 'DELETE',
@@ -125,7 +130,9 @@
             getContacts(function() {
                         for (var i in _contacts){
                             var contact = _contacts[i]
-                            contactList.append('<li><a href="#" data-contact-id="' + i + '">' + contact.name + '</a></li>')
+                            contactList.append('<li><a href="#" data-contact-id="' + i + '">' + contact.name + '<br>' +
+                                                        '<label class="subLabelLeft">' + contact.title + '</label>' +
+                                                        '<label class="subLabelRight">' + contact.phone + '</label></a></li>')
                         }
                         contactList.listview("refresh")
                     } )
@@ -186,19 +193,10 @@
                               $("#contactedit-phone").val(),
                               $("#contactedit-twitter").val())
             }
-
-
-//            $.mobile.changePage( "#details", {
-//                transition: "slide",
-//                reverse: true,
-//                changeHash: false
-//            });
         })
 
         $(document).on("pagebeforeshow", "#details", function() {
             var details = $("#contact-details")
-            //details.html("")
-            //details.append('')
 
             $("#contact-title").text(_contacts[_currentContactID].title)
             $("#contact-name").text(_contacts[_currentContactID].name)
