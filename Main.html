@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <STYLE type="text/css">
+        .strongLabel {font-weight: bold;
+                      display: inline-block;
+                      width: 100px;}
+    </STYLE>
     <title>UI 1.1 MobileWeb Assignment</title>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" />
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
@@ -8,6 +13,7 @@
         var _apiKey = 'ui1_1'
         var _contacts = null
         var _currentContactID = null
+        var success = false
 
         //gets the contacts
         function getContacts(cb) {
@@ -15,7 +21,8 @@
                     'http://contacts.tinyapollo.com/contacts?key=' + _apiKey,
                     function(data) {
                         _contacts = data.contacts
-                        cb()
+                        if (cb != null)
+                            cb()
                     }
             )
         }
@@ -61,6 +68,57 @@
             })
         }
 
+        function DeleteContact() {
+            //$("#contactedit-title").val(_contacts[_currentContactID].param())
+            $.ajax({
+                url: 'http://contacts.tinyapollo.com/contacts/' + _contacts[_currentContactID]._id + '?key=' + _apiKey,
+                type: 'DELETE',
+                //async: false,
+                success: function(data) {
+                   go_home();
+                }
+            })
+        }
+
+        function go_home() {
+            $.mobile.changePage( "#home-page", {
+                transition: "slide",
+                reverse: true,
+                changeHash: false
+            });
+        }
+
+        function go_toEdit() {
+            $.mobile.changePage( "#edit", {
+                transition: "slide",
+                reverse: false,
+                changeHash: false
+            });
+        }
+
+        function go_toDetails() {
+            $.mobile.changePage( "#details", {
+                transition: "slide",
+                reverse: false,
+                changeHash: false
+            });
+        }
+
+        function areYouSure(text1, text2, button, callback) {
+            $("#sure .sure-1").text(text1);
+            $("#sure .sure-2").text(text2);
+            $("#sure .sure-do").text(button).on("click", function() {
+                callback();
+                //$(this).off("click.sure");
+            });
+            $("#sure .sure-dont").on("click", function() {
+                go_toDetails()
+            });
+            $.mobile.changePage("#sure", {
+                changeHash: false
+            });
+        }
+
         $(document).on("pagebeforeshow", "#home-page", function() {
             var contactList = $("#contact-list")
             contactList.html("")
@@ -84,27 +142,15 @@
 
         $(document).on("click", "#addbutton", function() {
             _currentContactID = null
-            $.mobile.changePage( "#edit", {
-                transition: "slide",
-                reverse: false,
-                changeHash: false
-            });
+            go_toEdit()
         })
 
         $(document).on("click", "#contact-details #editbutton", function() {
-            $.mobile.changePage( "#edit", {
-                transition: "slide",
-                reverse: false,
-                changeHash: false
-            });
+            go_toEdit()
         })
 
         $(document).on("click", "#contact-details #backbutton", function() {
-            $.mobile.changePage( "#home-page", {
-                transition: "slide",
-                reverse: true,
-                changeHash: false
-            });
+            go_home()
         })
 
         $(document).on("click", "#cancelbutton", function() {
@@ -115,12 +161,14 @@
                     changeHash: false
                 });
             } else {
-                $.mobile.changePage( "#home-page", {
-                    transition: "slide",
-                    reverse: true,
-                    changeHash: false
-                });
+                go_home()
             }
+        })
+
+        $(document).on("click", "#deletebutton", function() {
+            areYouSure("Delete Contact?",
+                       "Are you sure you want to delete " + _contacts[_currentContactID].name + "?",
+                       "Yes", DeleteContact)
         })
 
         $(document).on("click", "#savebutton", function() {
@@ -161,12 +209,14 @@
 
         $(document).on("pagebeforeshow", "#edit", function() {
             if (_currentContactID != null) {
+                $("#addEditHeader").text("Edit")
                 $("#contactedit-title").val(_contacts[_currentContactID].title)
                 $("#contactedit-name").val(_contacts[_currentContactID].name)
                 $("#contactedit-email").val(_contacts[_currentContactID].email)
                 $("#contactedit-phone").val(_contacts[_currentContactID].phone)
                 $("#contactedit-twitter").val(_contacts[_currentContactID].twitterId)
             } else {
+                $("#addEditHeader").text("Add")
                 $("#contactedit-title").val("")
                 $("#contactedit-name").val("")
                 $("#contactedit-email").val("")
@@ -179,6 +229,7 @@
     <script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
 </head>
 <body>
+
     <div data-role="page" id="home-page">
         <div data-role="header">
             <h1>UI 1.1 MobileWeb Assignment</h1>
@@ -198,48 +249,57 @@
         </div>
         <div data-role="content">
             <div id="contact-details">
-                <label>Title: </label>
+                <label class="strongLabel">Title: </label>
                 <label id="contact-title">
                     test
                 </label><br>
-                <label><strong>Name: </strong></label>
+                <label class="strongLabel">Name:</label>
                 <label id="contact-name">test</label><br>
-                <label>Email: </label>
+                <label class="strongLabel">Email: </label>
                 <label id="contact-email">test</label><br>
-                <label>Phone: </label>
+                <label class="strongLabel">Phone: </label>
                 <label id="contact-phone"></label><br>
-                <label>Twitter ID: </label>
+                <label class="strongLabel">Twitter ID: </label>
                 <label id="contact-twitter"></label><br>
                 <button name="back" id="backbutton" data-inline="true">Back</button>
-                <button name="edit" id="editbutton" data-inline="true">Edit Contact</button>
+                <button name="edit" id="editbutton" data-inline="true">Edit Contact</button><br>
+                <button name="delete" id="deletebutton" data-inline="true">Delete Contact</button>
             </div>
         </div>
     </div>
 
     <div data-role="page" id="edit">
         <div data-role="header" data-position="fixed">
-            <h1>Edit</h1>
+            <h1 id="addEditHeader">Edit</h1>
         </div>
         <div data-role="content">
             <div id="contact-edit">
-                <label>Title: </label>
-                <input id="contactedit-title"/><br>
+                <label class="strongLabel">Title: </label>
+                <input id="contactedit-title"/>
 
-                <label><strong>Name: </strong></label>
-                <input id="contactedit-name"/><br>
+                <label class="strongLabel">Name:</label>
+                <input id="contactedit-name"/>
 
-                <label>Email: </label>
-                <input id="contactedit-email"/><br>
+                <label class="strongLabel">Email: </label>
+                <input id="contactedit-email"/>
 
-                <label>Phone: </label>
-                <input id="contactedit-phone"/><br>
+                <label class="strongLabel">Phone: </label>
+                <input id="contactedit-phone"/>
 
-                <label>Twitter ID: </label>
-                <input id="contactedit-twitter"/><br>
+                <label class="strongLabel">Twitter ID: </label>
+                <input id="contactedit-twitter"/>
 
                 <button name="cancel" id="cancelbutton" data-inline="true">Cancel Changes</button>
                 <button name="save" id="savebutton" data-inline="true" float="right">Save Contact</button>
             </div>
+        </div>
+    </div>
+    <div data-role="dialog" id="sure" data-title="Are you sure?">
+        <div data-role="content">
+            <h3 class="sure-1">???</h3>
+            <p class="sure-2">???</p>
+            <a href="#" class="sure-do" data-role="button" data-theme="b">Yes</a>
+            <a href="#" class="sure-dont" data-role="button" data-theme="c">No</a>
         </div>
     </div>
 </body>
