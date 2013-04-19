@@ -25,7 +25,7 @@
 
         //gets the contacts
         function getContacts(cb) {
-            $.get(
+            $.getJSON(
                     'http://contacts.tinyapollo.com/contacts?key=' + _apiKey,
                     function(data) {
                         _contacts = data.contacts
